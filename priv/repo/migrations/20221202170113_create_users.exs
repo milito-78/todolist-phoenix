@@ -3,7 +3,6 @@ defmodule TodolistApi.Repo.Migrations.CreateUsers do
 
   def change do
     create table(:users) do
-      add :id, :integer
       add :full_name, :string, null: false
       add :email, :string, null: false
       add :password, :string, null: false

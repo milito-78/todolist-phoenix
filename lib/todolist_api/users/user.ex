@@ -1,14 +1,13 @@
 defmodule TodolistApi.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
+  @timestamps_opts inserted_at: :created_at
 
   schema "users" do
-    field :created_at, :naive_datetime
-    field :deleted_at, :naive_datetime
     field :email, :string
     field :full_name, :string
-    field :id, :integer
-    field :updated_at, :naive_datetime
+    field :password, :string
+    field :deleted_at, :naive_datetime
 
     timestamps()
   end
@@ -16,8 +15,20 @@ defmodule TodolistApi.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:id, :full_name, :email, :created_at, :updated_at, :deleted_at])
-    |> validate_required([:id, :full_name, :email, :created_at, :updated_at, :deleted_at])
+    |> cast(attrs, [:full_name, :email, :password])
+    |> validate_required([:full_name, :email, :password])
     |> unique_constraint(:email)
+    |> hashed_password()
+  end
+
+  defp hashed_password(user) do
+    with password <- fetch_field!(user,:password) do
+      hashed = Bcrypt.hash_pwd_salt(password)
+      put_change(user,:password,hashed)
+    end
+  end
+
+  def check_password(hashed, password) do
+    Bcrypt.verify_pass(password,hashed)
   end
 end
