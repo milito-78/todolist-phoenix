@@ -5,8 +5,23 @@ defmodule TodolistApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :authenticated do
+    plug TodolistApi.Plug.Authenticate
+  end
+
   scope "/api", TodolistApiWeb do
     pipe_through :api
+    scope "/user" do
+      post "/login", UserController, :login
+      post "/register", UserController, :register
+    end
+  end
+
+  scope "/api", ReceiptApiWeb do
+    pipe_through [:api, :authenticated]
+    scope "/user" do
+      post "/logout", UserController, :logout
+    end
   end
 
   # Enables LiveDashboard only for development

@@ -1,24 +1,52 @@
 defmodule TodolistApiWeb.UserView do
   use TodolistApiWeb, :view
-  alias TodolistApiWeb.UserView
+  alias TodolistApiWeb.{UserView,TokenView}
 
-  def render("index.json", %{users: users}) do
-    %{data: render_many(users, UserView, "user.json")}
+  def render("login.json", %{user: user, token: token}) do
+    %{
+      message: "Login successfully",
+      data: %{
+        user: render_one(user, UserView, "user.json"),
+        token: render_one(token, TokenView, "token.json")
+      }
+    }
+  end
+
+  def render("register.json", %{user: user, token: token}) do
+    %{
+      message: "Register successfully",
+      data: %{
+        user: render_one(user, UserView, "user.json"),
+        token: render_one(token, TokenView, "token.json")
+      }
+    }
   end
 
   def render("show.json", %{user: user}) do
-    %{data: render_one(user, UserView, "user.json")}
+    %{
+      message: "Success",
+      data: %{
+        user: render_one(user, UserView, "user.json")
+      }
+    }
   end
+
+
+  def render("search.json", %{users: users}) do
+    %{
+      message: "Success",
+      data: render_many(users, UserView, "user.json")
+    }
+  end
+
 
   def render("user.json", %{user: user}) do
     %{
       id: user.id,
-      id: user.id,
-      full_name: user.full_name,
       email: user.email,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-      deleted_at: user.deleted_at
+      full_name: user.full_name,
+      "created_at": user.created_at,
+      "updated_at": user.updated_at
     }
   end
 end

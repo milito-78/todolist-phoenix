@@ -7,18 +7,28 @@ defmodule TodolistApi.Users do
   alias TodolistApi.Repo
 
   alias TodolistApi.Users.User
+  alias TodolistApi.Tokens.AccessToken
+  alias TodolistApi.Tokens
 
-  @doc """
-  Returns the list of users.
 
-  ## Examples
+  def authenticate(email, password) do
+    with %User{} = user <- get_user_by_email(email),
+        true <- User.check_password(user.password,password),
+        {:ok, %AccessToken{} = token, _} <- create_token(user) do
+          {:ok, token,  user}
+    else
+      _ -> {:error , :unauthenticate}
+    end
+  end
 
-      iex> list_users()
-      [%User{}, ...]
+  def register(attr) do
+    with {:ok, %User{} = user} <- create_user(attr) do
+      create_token(user)
+    end
+  end
 
-  """
-  def list_users do
-    Repo.all(User)
+  def logout(token) do
+    Tokens.revoke_token(token)
   end
 
   @doc """
@@ -35,7 +45,9 @@ defmodule TodolistApi.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id), do: Repo.get(User, id)
+
+  def get_user_by_email(email), do: Repo.get_by(User, email: email)
 
   @doc """
   Creates a user.
@@ -55,38 +67,21 @@ defmodule TodolistApi.Users do
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a user.
 
-  ## Examples
 
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
-
-      iex> update_user(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.changeset(attrs)
-    |> Repo.update()
+  def create_token(user) do
+    with {:ok, %AccessToken{} = token} <- Tokens.generate_token(user) do
+      {:ok, token, user}
+    end
   end
 
-  @doc """
-  Deletes a user.
-
-  ## Examples
-
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
+  def verify_token(token) do
+    with {:ok, data} <- Tokens.verify_token(token),
+         {:ok , user } <- get_user(data.user_id) do
+         {:ok , user}
+    else
+      _ -> {:error, :invalid_token }
+    end
   end
 
   @doc """
