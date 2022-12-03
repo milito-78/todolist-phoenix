@@ -14,6 +14,8 @@ defmodule TodolistApi.Application do
       TodolistApiWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: TodolistApi.PubSub},
+      # Start Cachex
+      {Cachex, name: :my_cache},
       # Start the Endpoint (http/https)
       TodolistApiWeb.Endpoint
       # Start a worker by calling: TodolistApi.Worker.start_link(arg)
