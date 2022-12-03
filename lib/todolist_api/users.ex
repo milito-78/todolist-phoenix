@@ -17,7 +17,7 @@ defmodule TodolistApi.Users do
         {:ok, %AccessToken{} = token, _} <- create_token(user) do
           {:ok, token,  user}
     else
-      _ -> {:error , :unauthenticate}
+      _ -> {:error , :unauthenticated}
     end
   end
 
@@ -27,8 +27,13 @@ defmodule TodolistApi.Users do
     end
   end
 
-  def logout(token) do
-    Tokens.revoke_token(token)
+  def revoke(token) do
+    with {count, _} <- Tokens.revoke_token(token),
+        count > 0 do
+          {:ok}
+        else
+          _ -> {:error}
+    end
   end
 
   @doc """
@@ -45,7 +50,6 @@ defmodule TodolistApi.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user(id), do: Repo.get(User, id)
 
   def get_user_by_email(email), do: Repo.get_by(User, email: email)
 
@@ -81,6 +85,14 @@ defmodule TodolistApi.Users do
          {:ok , user}
     else
       _ -> {:error, :invalid_token }
+    end
+  end
+
+  def get_user(id) do
+    with %User{} = user <-  Repo.get(User, id) do
+      {:ok, user}
+    else
+      _ -> {:error, :undefined}
     end
   end
 

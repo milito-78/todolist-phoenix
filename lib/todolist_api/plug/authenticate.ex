@@ -1,6 +1,6 @@
 defmodule TodolistApi.Plug.Authenticate do
   import Plug.Conn
-  alias TodoistApi.Users
+  alias TodolistApi.Users
 
   def init(options) do
     options

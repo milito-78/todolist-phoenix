@@ -37,6 +37,8 @@ defmodule TodolistApi.Tokens do
   end
 
   def verify_token(token) do
+    IO.inspect( get_token(token))
+    IO.puts(token)
     with %AccessToken{} = access <- get_token(token),
         {:ok, _ } <- verify(token,access.expired_after) do
           {:ok, access}

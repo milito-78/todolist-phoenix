@@ -37,10 +37,9 @@ defmodule TodolistApiWeb.UserController do
 
   end
 
-  def logout(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
-
-    with {:ok, %User{}} <- Users.delete_user(user) do
+  def logout(conn, _params) do
+    ["Bearer " <> token] = get_req_header(conn, "authorization")
+    with {:ok } <- Users.revoke(token) do
       send_resp(conn, :no_content, "")
     end
   end

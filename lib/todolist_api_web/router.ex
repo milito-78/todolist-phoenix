@@ -17,7 +17,7 @@ defmodule TodolistApiWeb.Router do
     end
   end
 
-  scope "/api", ReceiptApiWeb do
+  scope "/api", TodolistApiWeb do
     pipe_through [:api, :authenticated]
     scope "/user" do
       post "/logout", UserController, :logout
