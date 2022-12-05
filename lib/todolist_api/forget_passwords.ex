@@ -57,12 +57,25 @@ defmodule TodolistApi.ForgetPasswords do
         false <- saved_token == nil,
         true <- (token == saved_token),
         true <- (forget.code == code) do
-          {:ok , :true}
+          {:ok , :true, forget, user}
     else
         nil -> {:error, :undefined}
         _ -> { :error, :false }
     end
 
+  end
+
+  def reset_password(code, email, token, password) do
+    with {:ok, :true, forget, user} <- check_code(email,token,code) do
+      with {:ok, %User{} = user} <- Users.change_password(user,%{password: password}) do
+        delete_token(forget)
+        revoke_user_all_token(user.id)
+        {:ok, user}
+      end
+    else
+      {:error, :undefined} -> {:error, :undefined}
+      _ -> { :error, :false }
+    end
   end
 
   defp _generate_token(data) do
@@ -76,6 +89,17 @@ defmodule TodolistApi.ForgetPasswords do
   defp send_email(email,code) do
     # TODO send code by queue
     IO.puts("#{email} : #{code}")
+  end
+
+
+  defp delete_token(forget) do
+    key = "forget:" <> forget.email
+    Cachex.del(:my_cache, key)
+    Cachex.del(:my_cache,  key <> ":token")
+  end
+
+  defp revoke_user_all_token(user_id) do
+    Tokens.revoke_all(user_id)
   end
 
 end

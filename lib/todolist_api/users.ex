@@ -96,6 +96,12 @@ defmodule TodolistApi.Users do
     end
   end
 
+  def change_password(user,attrs) do
+    user
+    |> User.change_password_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 

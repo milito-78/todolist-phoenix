@@ -19,4 +19,10 @@ defmodule TodolistApiWeb.ForgetPasswordView do
       }
     }
   end
+  def render("reset.json", _params) do
+    %{
+      message: "Password reset successfully",
+      data: nil
+    }
+  end
 end

@@ -32,7 +32,7 @@ defmodule TodolistApiWeb.ForgetPasswordController do
   def check_code(conn, _params) do
     data = conn.query_params
     with true <- check_email_token(data),
-        {:ok, :true} <- ForgetPasswords.check_code(data["email"],data["token"],data["code"]) do
+        { :ok, :true, _, _ } <- ForgetPasswords.check_code(data["email"],data["token"],data["code"]) do
       conn
       |> render("check.json",%{message: "code is valid" , check: true})
     else
@@ -56,7 +56,44 @@ defmodule TodolistApiWeb.ForgetPasswordController do
   end
 
   def reset_password(conn, %{"code" => code,"email" => email, "token" => token,"password" => password, "password_confirmation" => password_confirmation }) do
-
+    with { :ok, _ } <- ForgetPasswords.reset_password(code, email, token, password) do
+      conn
+      |> render("reset.json")
+    else
+      {:error,:undefined} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{
+            message: "Validation Exception",
+            errors: %{
+              "email" => [
+                "email is not exists"
+              ]
+            }
+          })
+      {:error, :false} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{
+            message: "Validation Exception",
+            errors: %{
+              "code" => [
+                "Please verify you account once more. Verify code has been expired"
+              ]
+            }
+          })
+      _ ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{
+            message: "Validation Exception",
+            errors: %{
+              "code" => [
+                "yes"
+              ]
+            }
+          })
+    end
   end
 
 

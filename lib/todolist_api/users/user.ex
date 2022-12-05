@@ -21,6 +21,14 @@ defmodule TodolistApi.Users.User do
     |> hashed_password()
   end
 
+  @doc false
+  def change_password_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:password])
+    |> validate_required([:password])
+    |> hashed_password()
+  end
+
   defp hashed_password(user) do
     with password <- fetch_field!(user,:password) do
       hashed = Bcrypt.hash_pwd_salt(password)

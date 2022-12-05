@@ -18,6 +18,7 @@ defmodule TodolistApiWeb.Router do
       scope "/forgot-password" do
         post "/send-code", ForgetPasswordController, :forget_password
         get "/check-code", ForgetPasswordController, :check_code
+        post "/reset-password", ForgetPasswordController, :reset_password
       end
     end
   end
