@@ -46,6 +46,25 @@ defmodule TodolistApi.ForgetPasswords do
     end
   end
 
+  def check_code(email,token,code) do
+    key = "forget:" <> email
+
+    with %User{} = user <- Users.get_user_by_email(email),
+        {:ok, value} <- Cachex.get(:my_cache, key),
+        false <- value == nil,
+        {:ok, %ForgetPassword{} = forget} <- ForgetPassword.decode(value),
+        {:ok, saved_token} = Cachex.get(:my_cache, key <> ":token"),
+        false <- saved_token == nil,
+        true <- (token == saved_token),
+        true <- (forget.code == code) do
+          {:ok , :true}
+    else
+        nil -> {:error, :undefined}
+        _ -> { :error, :false }
+    end
+
+  end
+
   defp _generate_token(data) do
     %{data | token: data |> ForgetPassword.toMap() |> Tokens.sign() }
   end

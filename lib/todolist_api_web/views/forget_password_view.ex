@@ -10,4 +10,13 @@ defmodule TodolistApiWeb.ForgetPasswordView do
       }
     }
   end
+
+  def render("check.json", %{message: message, check: check}) do
+    %{
+      message: message,
+      data: %{
+        "check": check
+      }
+    }
+  end
 end
