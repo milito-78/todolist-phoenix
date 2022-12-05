@@ -14,6 +14,10 @@ defmodule TodolistApiWeb.Router do
     scope "/user" do
       post "/login", UserController, :login
       post "/register", UserController, :register
+
+      scope "/forgot-password" do
+        post "/send-code", ForgetPasswordController, :forget_password
+      end
     end
   end
 

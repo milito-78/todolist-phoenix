@@ -2,7 +2,6 @@ defmodule TodolistApiWeb.UserController do
   use TodolistApiWeb, :controller
 
   alias TodolistApi.Users
-  alias TodolistApi.Users.User
 
   action_fallback TodolistApiWeb.FallbackController
 
@@ -32,6 +31,10 @@ defmodule TodolistApiWeb.UserController do
   end
 
   def profile(conn, _params) do
+    # Cachex.put(:my_cache, "Test", "This is a test",ttl: :timer.seconds(5))
+    # IO.inspect(Cachex.get(:my_cache, "XXX"))
+    # IO.inspect(Cachex.get(:my_cache, "Test"))
+
     conn
     |> render("show.json",user: conn.assigns[:current_user])
 
