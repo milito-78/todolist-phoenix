@@ -28,6 +28,10 @@ defmodule TodolistApiWeb.Router do
     scope "/user" do
       get "/profile", UserController, :profile
       post "/logout", UserController, :logout
+
+      scope "/tasks" do
+        get "/", TaskController, :index
+      end
     end
   end
 

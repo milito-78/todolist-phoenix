@@ -4,20 +4,11 @@ defmodule TodolistApi.Tasks do
   """
   import Ecto.Query, warn: false
   alias TodolistApi.Repo
-
   alias TodolistApi.Tasks.Task
 
-  @doc """
-  Returns the list of tasks.
-
-  ## Examples
-
-      iex> list_tasks()
-      [%Task{}, ...]
-
-  """
-  def list_tasks do
-    Repo.all(Task)
+  def user_tasks_list(user_id,page) do
+    from(c in Task, where: c.user_id == ^user_id)
+    |> Repo.paginate(page: Repo.get_page(page))
   end
 
   @doc """

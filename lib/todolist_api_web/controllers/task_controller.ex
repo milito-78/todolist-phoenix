@@ -6,9 +6,15 @@ defmodule TodolistApiWeb.TaskController do
 
   action_fallback TodolistApiWeb.FallbackController
 
-  def index(conn, _params) do
-    tasks = Tasks.list_tasks()
-    render(conn, "index.json", tasks: tasks)
+  def index(conn, params) do
+    conn
+    |> render(
+        "paginate.json",
+        paginate: Tasks.user_tasks_list(
+          conn.assigns[:current_user].id,
+          Map.get(params, "page", 1)
+        )
+      )
   end
 
   def create(conn, %{"task" => task_params}) do

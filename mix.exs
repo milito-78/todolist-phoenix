@@ -46,7 +46,8 @@ defmodule TodolistApi.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:bcrypt_elixir, "~> 3.0"},
       {:cachex, "~> 3.4"},
-      {:timex, "~> 3.0"}
+      {:timex, "~> 3.0"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 
