@@ -8,6 +8,7 @@ defmodule TodolistApi.Users.User do
     field :full_name, :string
     field :password, :string
     field :deleted_at, :naive_datetime
+    has_many :tasks, TodolistApi.Tasks.Task
 
     timestamps()
   end
