@@ -11,21 +11,10 @@ defmodule TodolistApi.Tasks do
     |> Repo.paginate(page: Repo.get_page(page))
   end
 
-  @doc """
-  Gets a single task.
-
-  Raises `Ecto.NoResultsError` if the Task does not exist.
-
-  ## Examples
-
-      iex> get_task!(123)
-      %Task{}
-
-      iex> get_task!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_task!(id), do: Repo.get!(Task, id)
+  def get_user_task!(id,user_id) do
+    from(t in Task, where: t.user_id == ^user_id and t.id == ^id)
+    |>Repo.one!
+  end
 
   @doc """
   Creates a task.

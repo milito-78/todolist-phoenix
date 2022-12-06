@@ -27,8 +27,8 @@ defmodule TodolistApiWeb.TaskController do
   end
 
   def show(conn, %{"id" => id}) do
-    task = Tasks.get_task!(id)
-    render(conn, "show.json", task: task)
+    conn
+    |> render("show.json", task: Tasks.get_user_task!(id,conn.assigns[:current_user].id))
   end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
@@ -40,10 +40,10 @@ defmodule TodolistApiWeb.TaskController do
   end
 
   def delete(conn, %{"id" => id}) do
-    task = Tasks.get_task!(id)
+    task = Tasks.get_user_task!(id,conn.assigns[:current_user].id)
 
     with {:ok, %Task{}} <- Tasks.delete_task(task) do
-      send_resp(conn, :no_content, "")
+      render(conn, "delete.json")
     end
   end
 end

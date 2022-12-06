@@ -31,6 +31,9 @@ defmodule TodolistApiWeb.Router do
 
       scope "/tasks" do
         get "/", TaskController, :index
+        get "/:id", TaskController, :show
+        delete "/:id", TaskController, :delete
+
       end
     end
   end
