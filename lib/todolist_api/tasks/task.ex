@@ -19,6 +19,13 @@ defmodule TodolistApi.Tasks.Task do
   def changeset(task, attrs) do
     task
     |> cast(attrs, [:title, :description, :image_path, :deadline,:user_id])
-    |> validate_required([:title, :description, :image_path, :deadline,:user_id])
+    |> validate_required([:title, :description, :user_id])
+  end
+
+  @doc false
+  def update_changeset(task, attrs) do
+    task
+    |> cast(attrs, [:title, :description, :image_path, :deadline])
+    |> validate_required([:title, :description])
   end
 end

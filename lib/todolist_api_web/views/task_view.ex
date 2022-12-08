@@ -25,6 +25,13 @@ defmodule TodolistApiWeb.TaskView do
     }
   end
 
+  def render("create.json", %{task: task}) do
+    %{
+      "message": "Task created successfully",
+      data: render_one(task, TaskView, "task.json")
+    }
+  end
+
   def render("delete.json", _params) do
     %{
       "message": "Task deleted successfully"

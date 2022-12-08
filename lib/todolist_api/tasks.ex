@@ -28,10 +28,16 @@ defmodule TodolistApi.Tasks do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_task(attrs \\ %{}) do
+  def create_task(user_id, attrs \\ %{}) do
     %Task{}
-    |> Task.changeset(attrs)
+    |> Task.changeset(cast(Map.put(attrs,"user_id", user_id)))
     |> Repo.insert()
+  end
+
+  defp cast(attrs) do
+    attrs
+    |> Map.put("image_path",attrs["image"])
+    |> Map.delete("image")
   end
 
   @doc """
@@ -48,7 +54,7 @@ defmodule TodolistApi.Tasks do
   """
   def update_task(%Task{} = task, attrs) do
     task
-    |> Task.changeset(attrs)
+    |> Task.update_changeset(cast(attrs))
     |> Repo.update()
   end
 
