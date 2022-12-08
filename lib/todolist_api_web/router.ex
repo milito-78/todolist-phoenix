@@ -2,7 +2,7 @@ defmodule TodolistApiWeb.Router do
   use TodolistApiWeb, :router
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json","multipart/form-data"]
   end
 
   pipeline :authenticated do
@@ -37,6 +37,8 @@ defmodule TodolistApiWeb.Router do
         delete "/:id", TaskController, :delete
       end
     end
+
+    post "/uploader", UploadController, :create
   end
 
   # Enables LiveDashboard only for development

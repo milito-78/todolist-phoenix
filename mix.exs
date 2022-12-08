@@ -47,7 +47,8 @@ defmodule TodolistApi.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:cachex, "~> 3.4"},
       {:timex, "~> 3.0"},
-      {:scrivener_ecto, "~> 2.0"}
+      {:scrivener_ecto, "~> 2.0"},
+      {:uuid, "~> 1.1"}
     ]
   end
 
