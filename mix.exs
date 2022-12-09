@@ -20,7 +20,7 @@ defmodule TodolistApi.MixProject do
   def application do
     [
       mod: {TodolistApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools,:que]
     ]
   end
 
@@ -48,7 +48,8 @@ defmodule TodolistApi.MixProject do
       {:cachex, "~> 3.4"},
       {:timex, "~> 3.0"},
       {:scrivener_ecto, "~> 2.0"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:que, "~> 0.10.1"}
     ]
   end
 

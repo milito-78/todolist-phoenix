@@ -87,8 +87,7 @@ defmodule TodolistApi.ForgetPasswords do
   end
 
   defp send_email(email,code) do
-    # TODO send code by queue
-    IO.puts("#{email} : #{code}")
+    Que.add(TodolistApi.Workers.VerifyCodeEmail, email: email,code: code, type: :forget)
   end
 
 
