@@ -24,7 +24,17 @@ config :todolist_api, TodolistApiWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :todolist_api, TodolistApi.Mailer, adapter: Swoosh.Adapters.Local
+config :todolist_api, TodolistApi.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: "smtp.mailtrap.io",
+  username: "b839efc30f8eb2",
+  password: "acb9029582ee31",
+  ssl: false,
+  tls: :always,
+  auth: :always,
+  port: 2525,
+  retries: 0,
+  no_mx_lookups: false
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
