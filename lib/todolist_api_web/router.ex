@@ -27,6 +27,7 @@ defmodule TodolistApiWeb.Router do
     pipe_through [:api, :authenticated]
     scope "/user" do
       get "/profile", UserController, :profile
+      patch "/change-password", UserController, :change_password
       post "/logout", UserController, :logout
 
       scope "/tasks" do

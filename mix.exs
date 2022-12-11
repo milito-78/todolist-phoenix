@@ -20,7 +20,7 @@ defmodule TodolistApi.MixProject do
   def application do
     [
       mod: {TodolistApi.Application, []},
-      extra_applications: [:logger, :runtime_tools,:que]
+      extra_applications: [:logger, :runtime_tools,:que] #:os_mon
     ]
   end
 

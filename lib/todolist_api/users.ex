@@ -102,6 +102,18 @@ defmodule TodolistApi.Users do
     |> Repo.update()
   end
 
+  def change_current_password(user, current,password,confirmation) do
+    if User.check_password(user.password,current) == false do
+      {:error, :current_password}
+    end
+
+    if password != confirmation do
+      {:error, :confirmation}
+    end
+
+    change_password(user,%{"password" => password})
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 

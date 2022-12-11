@@ -31,10 +31,6 @@ defmodule TodolistApiWeb.UserController do
   end
 
   def profile(conn, _params) do
-    # Cachex.put(:my_cache, "Test", "This is a test",ttl: :timer.seconds(5))
-    # IO.inspect(Cachex.get(:my_cache, "XXX"))
-    # IO.inspect(Cachex.get(:my_cache, "Test"))
-
     conn
     |> render("show.json",user: conn.assigns[:current_user])
 
@@ -45,5 +41,43 @@ defmodule TodolistApiWeb.UserController do
     with {:ok } <- Users.revoke(token) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def change_password(conn, %{"current_password" => current, "password" => password, "password_confirmation" => confirmation }) do
+
+    with {:ok, _} <- Users.change_current_password( conn.assigns[:current_user],current,password,confirmation) do
+      send_resp(conn, :no_content, "")
+    else
+      {:error, :current_password} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{
+            message: "Validation Exception",
+            errors: %{
+              "current_password" => [
+                "Your current password is incorrect"
+              ]
+            }
+          })
+      {:error, :confirmation} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{
+            message: "Validation Exception",
+            errors: %{
+              "password" => [
+                "password confirmation is incorrect"
+              ]
+            }
+          })
+        _ ->
+          conn
+          |> put_status(:server_error)
+          |> json(%{
+              message: "Server Error",
+              errors: "There is an error during update password"
+            })
+    end
+
   end
 end
