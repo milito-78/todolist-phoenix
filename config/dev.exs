@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :todolist_api, TodolistApi.Repo,
-  username: "root",
-  password: "",
-  hostname: "localhost",
-  database: "todolist_elixir",
+  username: System.get_env("DB_USERNAME","root"),
+  password: System.get_env("DB_PASSWORD","password"),
+  hostname: System.get_env("DB_HOST","localhost"),
+  database: System.get_env("DB_DATABASE","todo_list"),
+  port: System.get_env("DB_PORT","3306") |> String.to_integer,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
