@@ -1,9 +1,9 @@
-version: '3.6'
+version: '3.8'
+
 services:
   phoenix:
-    build: 
-      context: .
-    depends_on:
+    build: .
+    #depends_on:
     environment:
       MIX_ENV: prod
     env_file:
@@ -12,3 +12,5 @@ services:
       - '4000:4000'
     volumes:
       - .:/app
+
+#volumes:

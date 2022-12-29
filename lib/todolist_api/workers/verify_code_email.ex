@@ -1,4 +1,5 @@
 defmodule TodolistApi.Workers.VerifyCodeEmail do
+  require Logger
   use Que.Worker, concurrency: 1
   alias TodolistApi.Mails.ForgetPasswordMail
   alias TodolistApi.Mailer
@@ -12,7 +13,7 @@ defmodule TodolistApi.Workers.VerifyCodeEmail do
 
 
   def on_failure({campaign, user}, error) do
-    Logger.debug("Campaign email to #{inspect(user)} failed: #{inspect(error)}")
+    Logger.error("Campaign email to #{inspect(user)} failed: #{inspect(error)}")
   end
 
   defp send_forget(email,code) do
