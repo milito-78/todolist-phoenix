@@ -14,7 +14,7 @@ defmodule TodolistApiWeb.UploadView do
     %{
       id: upload.id,
       file_name: upload.image_name,
-      file_path: TodolistApiWeb.Endpoint.url() <> "/media/images/" <> upload.image_name
+      file_path: System.get_env("APP_URL",TodolistApiWeb.Endpoint.url()) <> "/media/images/" <> upload.image_name
     }
   end
 end
