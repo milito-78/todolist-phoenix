@@ -21,6 +21,7 @@ defmodule TodolistApiWeb.Router do
         post "/reset-password", ForgetPasswordController, :reset_password
       end
     end
+    get "/splash", SplashController, :show
   end
 
   scope "/api", TodolistApiWeb do
