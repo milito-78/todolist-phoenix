@@ -4,12 +4,14 @@ defmodule TodolistApiWeb.SplashView do
 
   def render("show.json", %{options: options}) do
     %{
-      user: renderUser(options.user),
-      "timestamp": options.timestamp,
-      "version": options.version,
-      "update_version": options.update_version,
-      "api_version": options.api_version,
-      "is_essential_update": options.is_essential_update
+      data: %{
+        user: renderUser(options.user),
+        "timestamp": options.timestamp,
+        "version": options.version,
+        "update_version": options.update_version,
+        "api_version": options.api_version,
+        "is_essential_update": options.is_essential_update
+      }
     }
   end
 
